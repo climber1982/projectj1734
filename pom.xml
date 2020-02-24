@@ -7,6 +7,7 @@
     <modules>
         <module>outdoorboot</module>
         <module>bookboot</module>
+        <module>nio</module>
     </modules>
     <name>project173</name>
     <!-- <packaging>jar</packaging> -->
