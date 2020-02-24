@@ -4,6 +4,7 @@ import sun.security.provider.NativePRNG;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -34,25 +35,29 @@ public class Service {
                   SelectionKey key=  iterator.next();
                   //如果为阻塞
                   if(key.isAcceptable()){
-                      ServerSocketChannel channel1= (ServerSocketChannel) key.channel();
+                      ServerSocketChannel serverSocketChannel=       (ServerSocketChannel)key.channel();
+                   SocketChannel channel1= serverSocketChannel.accept();
 
                      if(null!=channel1) {
                          //把该通道设置为非阻塞
-                         channel1.configureBlocking(true);
-                         channel1.register(key.selector(), SelectionKey.OP_READ);
+                         channel1.configureBlocking(false);
+                        channel1.register(key.selector(),SelectionKey.OP_READ);
                      }
-                  }else if(key.isReadable()){
+                  }
+               else if(key.isReadable()){
                              //获取通道
                       SocketChannel socketChannel= (SocketChannel) key.channel();
                       //key以设置为读模式
-                      key.interestOps(SelectionKey.OP_READ);
-                      ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
-                      socketChannel.read(byteBuffer);
-                      System.out.println(new String(byteBuffer.array()));
-                      //key设置为写模式
-                      key.interestOps(SelectionKey.OP_WRITE);
-                      socketChannel.write(Charset.forName("utf-8").encode("hello 服务器"));
-                       //socketChannel.close();//关闭通道
+                      if(socketChannel.finishConnect()) {
+                          key.interestOps(SelectionKey.OP_READ);
+                          ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+                          socketChannel.read(byteBuffer);
+                          System.out.println(new String(byteBuffer.array()));
+                          //key设置为写模式
+
+                          key.interestOps(SelectionKey.OP_WRITE);
+                          socketChannel.write(Charset.forName("utf-8").encode("hello 服务器"));
+                      }
                   }
 
                         iterator.remove();

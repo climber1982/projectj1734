@@ -31,19 +31,33 @@ public class ClientUtil {
                      SelectionKey key=iterator.next();
                    SocketChannel channel= (SocketChannel) key.channel();
                  boolean bl= channel.finishConnect();//通道是否连接成功
+
                    if(bl){
                        key.interestOps(SelectionKey.OP_READ);
                        ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
-                       channel.read(byteBuffer);
-                       System.out.println(new String(byteBuffer.array())+i);
-                       key.interestOps(SelectionKey.OP_WRITE);
-                       channel.write(Charset.forName("utf-8").encode("我是客户端"+i));
-                     //  channel.close();
-                       i++;
-                   }
+                       StringBuffer stringBuffer=new StringBuffer();
+
+                           int len = 0;
+                           while ((len = channel.read(byteBuffer)) > 0) {
+
+                               stringBuffer.append(Charset.forName("utf-8").decode(byteBuffer).toString());
+
+                           }
+                           if(!"".equals(stringBuffer.toString())) {
+                               System.out.println(new String(byteBuffer.array()));
+                               key.interestOps(SelectionKey.OP_WRITE);
+
+                           }
+
+                           channel.write(Charset.forName("utf-8").encode("我是客户端"+i));
+
+                           i++;
+                       }
+
                    iterator.remove();
                }
             }
+
        }
     }
 }
