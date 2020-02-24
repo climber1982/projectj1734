@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商城</title>
+</head>
+<body>
+     <div>
+
+         <ul th:each="g,glist:${list}">
+               <li>
+                   <a th:href="@{${g.url}}" th:text="${g.urlName}"></a>
+               </li>
+         </ul>
+
+     </div>
+</body>
+</html>

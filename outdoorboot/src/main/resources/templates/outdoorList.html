@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>户外展示</title>
+</head>
+<body>
+     <div>
+
+         <ul th:each="b,blist:${list}">
+               <li th:text="${b}">
+
+               </li>
+         </ul>
+
+     </div>
+</body>
+</html>
