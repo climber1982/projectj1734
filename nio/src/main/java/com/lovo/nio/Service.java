@@ -35,11 +35,11 @@ public class Service {
                   //如果为阻塞
                   if(key.isAcceptable()){
                       ServerSocketChannel channel1= (ServerSocketChannel) key.channel();
-
+                        SocketChannel channel2=channel.accept();
                      if(null!=channel1) {
                          //把该通道设置为非阻塞
-                         channel1.configureBlocking(true);
-                         channel1.register(key.selector(), SelectionKey.OP_READ);
+                         channel2.configureBlocking(true);
+                         channel2.register(key.selector(), SelectionKey.OP_READ);
                      }
                   }else if(key.isReadable()){
                              //获取通道
