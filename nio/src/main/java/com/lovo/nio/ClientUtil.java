@@ -35,6 +35,7 @@ public class ClientUtil {
                        key.interestOps(SelectionKey.OP_READ);
                        ByteBuffer byteBuffer=ByteBuffer.allocate(1024);
                        channel.read(byteBuffer);
+                       if(byteBuffer.position()>0)
                        System.out.println(new String(byteBuffer.array())+i);
                        key.interestOps(SelectionKey.OP_WRITE);
                        channel.write(Charset.forName("utf-8").encode("我是客户端"+i));
